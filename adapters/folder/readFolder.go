@@ -338,7 +338,7 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 
 			// Manage albums
 			if la.flags.ImportIntoAlbum != "" {
-				a.Albums = []assets.Album{{Title: la.flags.ImportIntoAlbum}}
+				a.Albums = append(a.Albums, []assets.Album{{Title: la.flags.ImportIntoAlbum}}...)
 			} else {
 				done := false
 				if la.flags.PicasaAlbum {
@@ -369,6 +369,13 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 					}
 					a.Albums = []assets.Album{{Title: Album}}
 				}
+			}
+			if len(la.flags.ImportIntoAlbums) > 0 {
+				var albums []assets.Album
+				for _, album := range la.flags.ImportIntoAlbums {
+					albums = append(albums, assets.Album{Title: album})
+				}
+				a.Albums = append(a.Albums, albums...)
 			}
 
 			if la.flags.SessionTag {
