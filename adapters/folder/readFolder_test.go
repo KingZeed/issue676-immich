@@ -735,7 +735,7 @@ func TestParseDir_else(t *testing.T) {
 	}
 }
 
-func TestParseDirAlbumsWithSpaceChar(t *testing.T) {
+func TestParseDir_AlbumsWithSpaceChar(t *testing.T) {
 	t0 := time.Date(2021, 1, 1, 0, 0, 0, 0, time.Local)
 	ic := filenames.NewInfoCollector(time.Local, filetypes.DefaultSupportedMedia)
 	ctx := context.Background()
@@ -862,5 +862,23 @@ func TestParseDir_DuplicateAlbums(t *testing.T) {
 				}
 			}
 		}
+	}
+}
+
+func TestNewLocalFiles_ConflictingAlbumFlags(t *testing.T) {
+	ctx := context.Background()
+	recorder := &fileevent.Recorder{}
+	flags := &ImportFolderOptions{
+		ImportIntoAlbums:   []string{"dummy"},
+		UsePathAsAlbumName: FolderModePath,
+	}
+
+	la, err := NewLocalFiles(ctx, recorder, flags)
+
+	if err == nil || !strings.Contains(err.Error(), "cannot use both --into-albums and --folder-as-album") {
+		t.Errorf("Expected conflict error, got: %v", err)
+	}
+	if la != nil {
+		t.Errorf("Expected nil la due to error, got: %v", la)
 	}
 }
