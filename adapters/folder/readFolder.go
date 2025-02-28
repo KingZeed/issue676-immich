@@ -42,7 +42,7 @@ type LocalAssetBrowser struct {
 }
 
 func NewLocalFiles(ctx context.Context, l *fileevent.Recorder, flags *ImportFolderOptions, fsyss ...fs.FS) (*LocalAssetBrowser, error) {
-	if flags.ImportIntoAlbum != "" && flags.UsePathAsAlbumName != FolderModeNone {
+	if len(flags.ImportIntoAlbum) != 0 && flags.UsePathAsAlbumName != FolderModeNone {
 		return nil, errors.New("cannot use both --into-album and --folder-as-album")
 	}
 
@@ -337,8 +337,18 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 			}
 
 			// Manage albums
-			if la.flags.ImportIntoAlbum != "" {
-				a.Albums = []assets.Album{{Title: strings.TrimSpace(la.flags.ImportIntoAlbum)}}
+			if len(la.flags.ImportIntoAlbum) > 0 || len(la.flags.ImportIntoAlbums) > 0 {
+				length := len(la.flags.ImportIntoAlbum) + len(la.flags.ImportIntoAlbums)
+				a.Albums = make([]assets.Album, length)
+				i := 0
+				for _, albumTitle := range la.flags.ImportIntoAlbum {
+					a.Albums[i] = assets.Album{Title: strings.TrimSpace(albumTitle)}
+					i++
+				}
+				for _, albumTitle := range la.flags.ImportIntoAlbums {
+					a.Albums[i] = assets.Album{Title: strings.TrimSpace(albumTitle)}
+					i++
+				}
 			} else {
 				done := false
 				if la.flags.PicasaAlbum {
