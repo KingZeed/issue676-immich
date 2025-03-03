@@ -341,15 +341,13 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 
 			// Manage albums
 			if len(la.flags.ImportIntoAlbum) > 0 || len(la.flags.ImportIntoAlbums) > 0 {
-				length := len(la.flags.ImportIntoAlbum) + len(la.flags.ImportIntoAlbums)
+
+				albumsSet := mergeAlbumFlags(la.flags.ImportIntoAlbum, la.flags.ImportIntoAlbums)
+				length := len(albumsSet)
 				a.Albums = make([]assets.Album, length)
 				i := 0
-				for _, albumTitle := range la.flags.ImportIntoAlbum {
-					a.Albums[i] = assets.Album{Title: strings.TrimSpace(albumTitle)}
-					i++
-				}
-				for _, albumTitle := range la.flags.ImportIntoAlbums {
-					a.Albums[i] = assets.Album{Title: strings.TrimSpace(albumTitle)}
+				for _, albumTitle := range albumsSet {
+					a.Albums[i] = assets.Album{Title: albumTitle}
 					i++
 				}
 			} else {
