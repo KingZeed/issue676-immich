@@ -421,9 +421,11 @@ func mergeAlbumFlags(albumFlag []string, albumsFlag []string) []string {
 	albums := make(map[string]bool)
 
 	for _, album := range albumFlag {
+		album = strings.TrimSpace(album)
 		albums[album] = true
 	}
 	for _, album := range albumsFlag {
+		album = strings.TrimSpace(album)
 		albums[album] = true
 	}
 
