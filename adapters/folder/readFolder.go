@@ -421,7 +421,6 @@ func mergeAlbumFlags(albumFlag []string, albumsFlag []string) []string {
 		albumsArray[i] = key
 		i++
 	}
-	fmt.Print(albumsArray)
 	return albumsArray
 }
 
