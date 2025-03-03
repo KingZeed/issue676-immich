@@ -384,6 +384,7 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 				}
 			}
 
+			// Remove this.
 			if len(la.flags.ImportIntoAlbums) != 0 {
 				albumNames := []assets.Album{}
 				for i := 0; i < len(la.flags.ImportIntoAlbums); i++ {
@@ -413,6 +414,27 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 		}
 	}
 	return nil
+}
+
+func mergeAlbumFlags(albumFlag []string, albumsFlag []string) []string {
+	// Using a map to simulate a set (no duplicates)
+	albums := make(map[string]bool)
+
+	for _, album := range albumFlag {
+		albums[album] = true
+	}
+	for _, album := range albumsFlag {
+		albums[album] = true
+	}
+
+	// Convert to an array.
+	albumsArray := make([]string, len(albums))
+	i := 0
+	for key := range albums {
+		albumsArray[i] = key
+		i++
+	}
+	return albumsArray
 }
 
 func checkExistSideCar(fsys fs.FS, name string, ext string) (string, error) {
