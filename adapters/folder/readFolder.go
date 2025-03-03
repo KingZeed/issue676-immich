@@ -345,10 +345,9 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 				albumsSet := mergeAlbumFlags(la.flags.ImportIntoAlbum, la.flags.ImportIntoAlbums)
 				length := len(albumsSet)
 				a.Albums = make([]assets.Album, length)
-				i := 0
-				for _, albumTitle := range albumsSet {
+
+				for i, albumTitle := range albumsSet {
 					a.Albums[i] = assets.Album{Title: albumTitle}
-					i++
 				}
 			} else {
 				done := false
@@ -382,16 +381,6 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 				}
 			}
 
-			// Remove this.
-			if len(la.flags.ImportIntoAlbums) != 0 {
-				albumNames := []assets.Album{}
-				for i := 0; i < len(la.flags.ImportIntoAlbums); i++ {
-					albumNames = append(albumNames, assets.Album{Title: strings.TrimSpace(la.flags.ImportIntoAlbums[i])})
-				}
-
-				a.Albums = append(a.Albums, albumNames...)
-			}
-
 			if la.flags.SessionTag {
 				a.AddTag(la.flags.session)
 			}
@@ -419,12 +408,10 @@ func mergeAlbumFlags(albumFlag []string, albumsFlag []string) []string {
 	albums := make(map[string]bool)
 
 	for _, album := range albumFlag {
-		album = strings.TrimSpace(album)
-		albums[album] = true
+		albums[strings.TrimSpace(album)] = true
 	}
 	for _, album := range albumsFlag {
-		album = strings.TrimSpace(album)
-		albums[album] = true
+		albums[strings.TrimSpace(album)] = true
 	}
 
 	// Convert to an array.
@@ -434,6 +421,7 @@ func mergeAlbumFlags(albumFlag []string, albumsFlag []string) []string {
 		albumsArray[i] = key
 		i++
 	}
+	fmt.Print(albumsArray)
 	return albumsArray
 }
 
