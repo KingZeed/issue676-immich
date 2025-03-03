@@ -342,7 +342,7 @@ func (la *LocalAssetBrowser) parseDir(ctx context.Context, fsys fs.FS, dir strin
 			// Manage albums
 			if len(la.flags.ImportIntoAlbum) > 0 || len(la.flags.ImportIntoAlbums) > 0 {
 
-				albumsSet := mergeAlbumFlags(la.flags.ImportIntoAlbum, la.flags.ImportIntoAlbums)
+				albumsSet := mergeAlbumFlags(la.flags.ImportIntoAlbum, la.flags.ImportIntoAlbums) // Merged with no duplicates
 				length := len(albumsSet)
 				a.Albums = make([]assets.Album, length)
 
@@ -414,7 +414,6 @@ func mergeAlbumFlags(albumFlag []string, albumsFlag []string) []string {
 		albums[strings.TrimSpace(album)] = true
 	}
 
-	// Convert to an array.
 	albumsArray := make([]string, len(albums))
 	i := 0
 	for key := range albums {
