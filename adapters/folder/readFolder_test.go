@@ -903,7 +903,7 @@ func TestParseDir_CombiningAlbumFlags(t *testing.T) {
 		UsePathAsAlbumName: FolderModeNone,
 		InfoCollector:      ic,
 		SupportedMedia:     filetypes.DefaultSupportedMedia,
-		ImportIntoAlbum:    []string{"album1"},
+		ImportIntoAlbum:    "album1",
 		ImportIntoAlbums:   []string{"albums1"},
 	}
 	la, err := NewLocalFiles(ctx, recorder, flags, fsys)
